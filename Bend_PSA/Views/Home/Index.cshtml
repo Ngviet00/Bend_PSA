@@ -1,0 +1,318 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="wrap-content">
+    <div id="inspection-statistical" class="d-flex justify-content-between">
+        <div id="result">
+            <div id="data-chart-percent"></div>
+            <h3 class="genera-title">Result</h3>
+            <div class="d-flex justify-content-between">
+                <div class="current-tray">
+                    <h3 id="title-current-tray">Inspecting</h3>
+                    <div class="d-flex check-item">
+                        <div class="no-number">
+                            <div class="empty-row">&#8593;</div>
+                            <div class="no mb-1"></div>
+                            @for (int i = 1; i <= 20; i++)
+                            {
+                                <div class="stt">@i</div>
+                            }
+                        </div>
+
+                        <div class="is-check-tray checking-tray-left">
+                            <div class="title-cam text-center">Left</div>
+                            <div class="d-flex justify-content-between mb-1">
+                                <div class="type-camera">Area cam 1</div>
+                                <div class="type-camera">Line cam 2</div>
+                            </div>
+                            <div class="ng-ok">
+                                <div class="d-flex justify-content-center">
+                                    <div class="d-flex flex-column left-tray">
+                                        @for (int i = 1; i <= 20; i++)
+                                        {
+                                            <span class="ok left-area-@i">Wait</span>
+                                        }
+                                    </div>
+                                    <div class="d-flex flex-column right-tray">
+                                        @for (int i = 1; i <= 20; i++)
+                                        {
+                                            <span class="ng left-line-@i">Wait</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="is-check-tray checking-tray-right">
+                            <div class="title-cam text-center">Right</div>
+                            <div class="d-flex justify-content-between mb-1">
+                                <div class="type-camera">Area cam 3</div>
+                                <div class="type-camera">Line cam 4</div>
+                            </div>
+                            <div class="ng-ok">
+                                <div class="d-flex justify-content-center">
+                                    <div class="d-flex flex-column left-tray">
+                                        @for (int i = 1; i <= 20; i++)
+                                        {
+                                            <span class="ok right-area-@i">Wait</span>
+                                        }
+                                    </div>
+                                    <div class="d-flex flex-column right-tray">
+                                        @for (int i = 1; i <= 20; i++)
+                                        {
+                                            <span class="ng right-line-@i">Wait</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="no-number">
+                            <div class="empty-row">&#8593;</div>
+                            <div class="no mb-1"></div>
+                            @for (int i = 21; i <= 40; i++)
+                            {
+                                <div class="stt">@i</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="previous-tray">
+                    <h3 id="title-previous-tray">Previous</h3>
+
+                    <div class="d-flex check-item">
+                        <div class="no-number">
+                            <div class="empty-row">&#8593;</div>
+                            <div class="no mb-1"></div>
+                            @for (int i = 1; i <= 20; i++)
+                            {
+                                <div class="stt">@i</div>
+                            }
+                        </div>
+
+                        <div class="is-check-tray checking-tray-left">
+                            <div class="title-cam text-center">Left</div>
+                            <div class="d-flex justify-content-between mb-1">
+                                <div class="type-camera">Area cam 1</div>
+                                <div class="type-camera">Line cam 2</div>
+                            </div>
+
+                            <div class="ng-ok">
+                                <div class="d-flex justify-content-center">
+                                    <div class="d-flex flex-column left-tray" style="flex-basis: 49%">
+                                        @for (int i = 1; i <= 20; i++)
+                                        {
+                                            <span class="wait">
+                                                Wait
+                                            </span>
+                                        }
+                                    </div>
+                                    <div class="d-flex flex-column right-tray" style="flex-basis: 49%">
+                                        @for (int i = 1; i <= 20; i++)
+                                        {
+                                            <span class="wait">
+                                                Wait
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="is-check-tray checking-tray-right">
+                            <div class="title-cam text-center">Right</div>
+                            <div class="d-flex justify-content-between mb-1">
+                                <div class="type-camera">Area cam 3</div>
+                                <div class="type-camera">Line cam 4</div>
+                            </div>
+                            <div class="ng-ok">
+                                <div class="d-flex justify-content-center">
+                                    <div class="d-flex flex-column left-tray" style="flex-basis: 49%">
+                                        @for (int i = 1; i <= 20; i++)
+                                        {
+                                            <span class="wait">Wait</span>
+                                        }
+                                    </div>
+                                    <div class="d-flex flex-column right-tray" style="flex-basis: 49%">
+                                        @for (int i = 1; i <= 20; i++)
+                                        {
+                                            <span class="wait">Wait</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="no-number">
+                            <div class="empty-row">&#8593;</div>
+                            <div class="no mb-1"></div>
+                            @for (int i = 21; i <= 40; i++)
+                            {
+                                <div class="stt">@i</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="overview">
+            <div class="wrap-overview">
+                <h3 id="title-overview">Overview</h3>
+                <div class="counting-status d-flex justify-content-between">
+                    <div class="counting bg-white">
+                        <div class="first-row d-flex align-items-center justify-content-between">
+                            <div class="lbl-counting">Counting</div>
+                            <div class="lbl-tray-total">
+                                Tray Total
+                            </div>
+                            <div class="lbl-number" id="total-tray-ea">
+                               0
+                               @* @(ViewBag.TotalTray.ToString("#,##0").Replace(",", "."))*@
+                            </div>
+                        </div>
+
+                        <div class="second-row d-flex align-items-center justify-content-between mb-1">
+                            <div class="title">Total</div>
+                            <div class="w-100 total" id="total-ea">
+                                0
+                                @*@(ViewBag.Total.ToString("#,##0").Replace(",", "."))<span class="">&nbspEA</span>*@
+                            </div>
+                        </div>
+
+                        <div class="third-row d-flex align-items-center justify-content-between mb-1">
+                            <div class="title">OK</div>
+                            <div class="w-100 total">
+                                <div class="d-inline-block" id="total-ok-ea">
+                                    0
+                                    @*@ViewBag.TotalOK.ToString("#,##0").Replace(",", ".")<span>&nbspEA</span>*@
+                                </div>
+                                @*<span class="percent" id="percent-ok">@ViewBag.PercentChartOK %</span>*@
+                            </div>
+                        </div>
+
+                        <div class="fourth-row d-flex align-items-center justify-content-between mb-1">
+                            <div class="title">NG</div>
+                            <div class="w-100 total">
+                                <div class="d-inline-block" id="total-ng-ea">
+                                    0
+                                    @*@ViewBag.TotalNG.ToString("#,##0").Replace(",", ".")<span>&nbspEA</span>*@
+                                </div>
+                                @*<span class="percent" id="percent-ng">@ViewBag.PercentChartNG %</span>*@
+                            </div>
+                        </div>
+
+                        <div class="fifth-row d-flex align-items-center justify-content-between mb-1">
+                            <div class="title">Empty</div>
+                            <div class="w-100 total">
+                                <div class="d-inline-block" id="total-empty-ea">
+                                    0
+                                    @*@ViewBag.TotalEmpty.ToString("#,##0").Replace(",", ".")<span>&nbspEA</span>*@
+                                </div>
+                                @*<span class="percent" id="percent-empty">@ViewBag.PercentChartEmpty %</span>*@
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="io-status" class="bg-white">
+                        <div class="mt-1">
+                            <div id="title-io-status" class="mb-2">IO Status</div>
+                            @for (int i = 1; i <= 2; i++)
+                            {
+                                <div class="mb-2">
+                                    <label class="label-title">PC@{@i}-Area Camera:</label>
+
+                                    <span class="mx-4">
+                                        <div class="dot-connect-@i div-status"></div>
+                                        <label>Connect</label>
+                                    </span>
+                                    <span class="mx-5">
+                                        <div class="dot-cam-@i div-status"></div>
+                                        <label>CAM</label>
+                                    </span>
+
+                                    <span class="mx-4">
+                                        <div class="dot-deep-core-@i div-status"></div>
+                                        <label>Deep Learning</label>
+                                    </span>
+                                </div>
+                            }
+
+                            <div class="wr-system-status mb-2 mt-3">
+                                <span id="label-system-status">System status:</span>
+                                <span id="value-system-status">Pause</span>
+                                <span id="error-system-status" class="d-none"></span>
+                            </div>
+
+                            <div class="plc-status mb-2">
+                                <span id="label-plc-status">PLC connect status:</span>
+                                <span id="value-plc-status">Disconnect</span>
+                                <span id="error-plc-status" class="d-none">The door is opened</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="statistical-chart mt-4 d-flex justify-content-center">
+                <div class="total-error">
+                </div>
+
+                <div class="chart">
+                    <canvas id="pie-chart" width="300" height="300" style="height: 350px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="log-inspection" class="d-flex justify-content-between">
+        <div id="result-log">
+            <h3 class="genera-title">Result Log</h3>
+            <table class="ea_table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Model</th>
+                        <th>Tray Number</th>
+                        <th>Side</th>
+                        <th>No</th>
+                        <th>Camera</th>
+                        <th>Result</th>
+                        <th>Error Detection</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="result-log-no-data">
+                        <td colspan="12" class="w-100 text-lg-center text-dark fw-bold mt-1" style="font-size: 14px;">No data</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="time-log">
+            <h3 class="genera-title">Time Log</h3>
+            <table class="ea_table tbl-time-log">
+                <thead>
+                    <tr>
+                        <th class="max-w90">Time</th>
+                        <th class="max-w105">Type</th>
+                        <th>Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="time-log-no-data">
+                        <td colspan="12" class="w-100 text-lg-center text-dark fw-bold mt-1" style="font-size: 14px;">No data</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @*<script>
+        var percentOK = @Html.Raw(Json.Serialize(ViewBag.PercentChartOK));
+        var percentNG = @Html.Raw(Json.Serialize(ViewBag.PercentChartNG));
+        var percentEmpty = @Html.Raw(Json.Serialize(ViewBag.PercentChartEmpty));
+    </script>*@
+
+    <script type="module" src="~/js/home.js"></script>
+}

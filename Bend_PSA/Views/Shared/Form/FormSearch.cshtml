@@ -1,0 +1,119 @@
+﻿<div id="action-form-search">
+    <button type="button" class="btn btn-primary px-4" data-toggle="modal" data-target="#modalSearch">
+        Search
+    </button>
+
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document" style="min-width: 95rem">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title fw-bold" style="font-size: 18px;" id="exampleModalLabel">Search</h4>
+                    <button type="button" class="btn close" data-dismiss="modal" aria-label="Close">
+                        X
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div style="margin-right: 10px;">
+                            <label class="label-input-time" for="form-search-model">Model</label>
+                            <select id="form-search-model">
+                                <option value="" selected>Choose Model</option>
+                                <option value="1">Option 1</option>
+                                <option value="2">Option 2</option>
+                                <option value="3">Option 3</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="start" class="label-input-time" id="label-start">From:</label>
+                            <input type="date" class="input-date-time" id="start-date" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" />
+                            <input type="time" class="input-date-time" id="start-time" value="00:00" min="00:00" max="23:59" required />
+                        </div>
+
+                        <div style="margin-left: 2em">
+                            <label for="end" class="label-input-time">To:</label>
+                            <input type="date" class="input-date-time" id="end-date" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" />
+                            <input type="time" class="input-date-time" id="end-time" value="23:59" min="00:00" max="23:59" required />
+                        </div>
+
+                        <button class="btn btn-primary px-5 form-search-btn-search" style="margin-left: 2em">Search</button>
+                    </div>
+
+                    <div class="content mt-2">
+                        <h4 id="content-title" class="fw-bold text-dark mt-1 mb-3">Result</h4>
+
+                        <div class="d-flex">
+                            <div id="overview-result">
+                                <div class="counting bg-white">
+                                    <div class="first-row d-flex align-items-center justify-content-between">
+                                        <div class="lbl-counting">Counting</div>
+                                        <div class="lbl-tray-total">
+                                            Tray Total
+                                        </div>
+                                        <div class="lbl-number" id="form-search-total-tray-ea">0</div>
+                                    </div>
+
+                                    <div class="second-row d-flex align-items-center justify-content-between mb-2">
+                                        <div class="title">Total</div>
+                                        <div class="w-100 total" id="form-search-total-ea">0<span class="">EA</span></div>
+                                    </div>
+
+                                    <div class="third-row d-flex align-items-center justify-content-between mb-2">
+                                        <div class="title">OK</div>
+                                        <div class="w-100 total">
+                                            <div class="d-inline-block" id="form-search-total-ok-ea">0<span class="">EA</span></div>
+                                            <span class="percent" id="form-search-percent-ok">0 %</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="fourth-row d-flex align-items-center justify-content-between mb-2">
+                                        <div class="title">NG</div>
+                                        <div class="w-100 total">
+                                            <div class="d-inline-block" id="form-search-total-ng-ea">0<span class="">EA</span></div>
+                                            <span class="percent" id="form-search-percent-ng">0 %</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="fifth-row d-flex align-items-center justify-content-between mb-2">
+                                        <div class="title">Empty</div>
+                                        <div class="w-100 total">
+                                            <div class="d-inline-block" id="form-search-total-empty-ea">
+                                                0<span>EA</span>
+                                            </div>
+                                            <span class="percent" id="form-search-percent-empty">0 %</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="list-result" style="width: 74%; margin-left: 10px;border: 1px solid #a1a8f6;overflow-y: scroll; height: 490px; overflow-x: hidden ">
+                                <table class="table table-hover" style="border-radius: -29px; border-radius: 3px;">
+                                    <thead style="background: #D9E2FF;">
+                                        <tr style="font-size: 14px; color: #323232; font-weight: 600;">
+                                            <th scope="col">Id</th>
+                                            <th scope="col">DateTime</th>
+                                            <th scope="col">Model</th>
+                                            <th scope="col">Tray</th>
+                                            <th scope="col">Position</th>
+                                            <th scope="col">Result</th>
+                                            <th scope="col">Error</th>
+                                            <th scope="col">Image</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="12" class="text-center fw-bold text-dark tag-notice">Click search to show data</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="my-3 text-center">
+                            <button class="btn btn-warning form-search-btn-load-more" disabled>Load more</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

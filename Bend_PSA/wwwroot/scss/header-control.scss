@@ -1,0 +1,318 @@
+﻿$color_767676: #767676;
+$color_3C3C3C: #3C3C3C;
+$color_FFFFFF: #ffffff;
+
+#header-control {
+    padding: 5px 10px;
+    margin-top: 10px;
+
+    #time {
+        #date {
+            font-size: 13px;
+            color: $color_767676;
+            font-weight: 700;
+            margin-right: 10px;
+            border-right: 1px solid #767676;
+            padding-right: 12px;
+            line-height: 24px;
+        }
+
+        #current-time {
+            font-size: 18px;
+            font-weight: 700;
+            color: $color_3C3C3C;
+        }
+    }
+
+    #action {
+        .option-model {
+            label {
+                font-size: 12px;
+                color: $color_767676;
+                padding-right: 10px;
+            }
+
+            select {
+                outline: none;
+                border: 1px solid #cfcfcf;
+                width: 10em;
+                height: 30px;
+                border-radius: 3px;
+                font-size: 13px;
+                color: $color_767676;
+            }
+        }
+
+        .option-time {
+            margin-left: 15px;
+            position: relative;
+
+            label {
+                font-size: 12px;
+                color: $color_767676;
+                padding-right: 10px;
+            }
+
+            select {
+                outline: none;
+                border: 1px solid #cfcfcf;
+                width: 16em;
+                height: 30px;
+                border-radius: 3px;
+                font-size: 13px;
+                color: $color_767676;
+                padding-left: 10px;
+            }
+
+            .fa-clock-o {
+                position: absolute;
+                top: 15%;
+                font-size: 20px;
+                left: 55px;
+            }
+        }
+
+        .btn-export-excel {
+            a {
+                color: $color_FFFFFF;
+                border-radius: 3px;
+                text-decoration: none;
+                padding: 9px 25px;
+                font-size: 12px;
+                background: #237BFE;
+                border: none;
+
+                &:hover {
+                    background: #1762d1;
+                }
+            }
+
+            i {
+                font-size: 15px;
+                padding-left: 5px;
+            }
+        }
+
+        .btn-setting {
+            border: 1px solid#cfcfcf;
+            margin: 0px 10px;
+
+            &:hover {
+                background: #ededed;
+            }
+
+            i {
+                font-size: 14px;
+                padding-right: 5px;
+            }
+        }
+
+        select {
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        #action-form-search {
+
+            #form-search-model, #form-search-result {
+                padding: 5px 10px;
+                font-size: 20px;
+                border-radius: 3px;
+                outline: none;
+                border: 1px solid #cfcfcf;
+                font-size: 18px;
+                color: #5f5f5f;
+            }
+
+            .input-date-time {
+                padding: 5px 10px;
+                font-size: 20px;
+                border-radius: 3px;
+                outline: none;
+                border: 1px solid #cfcfcf;
+                font-size: 18px;
+                color: #5f5f5f;
+            }
+
+            #start-time, #end-time {
+                padding: 4px 10px;
+            }
+
+            .label-input-time {
+                font-size: 17px;
+                color: #818181;
+                padding-right: 2px;
+            }
+
+            .content {
+                #content-title {
+                }
+
+                #overview-result {
+                    flex-basis: 25%;
+
+                    .counting {
+                        flex-basis: 38%;
+                        border: 1px solid #a1a8f6;
+                        height: auto;
+                        padding: 0 10px;
+
+                        .first-row {
+                            .lbl-counting {
+                                font-size: 16px;
+                                font-weight: 700;
+                                color: #4F5AED;
+                                line-height: 16px;
+                            }
+
+                            .lbl-tray-total {
+                                font-size: 14px;
+                                font-weight: 700;
+                                color: #767676;
+                            }
+
+                            .lbl-number {
+                                font-size: 24px;
+                                color: #385083;
+                                font-weight: 600;
+                                padding: 10px;
+                            }
+                        }
+
+                        .second-row {
+                            .title {
+                                font-size: 13px;
+                                color: #767676;
+                                font-weight: 700;
+                                min-width: 60px;
+                            }
+
+                            .total {
+                                font-size: 24px;
+                                color: #385083;
+                                font-weight: 600;
+                                padding-left: 42px;
+
+                                span {
+                                    font-size: 14px;
+                                }
+                            }
+                        }
+
+                        .third-row {
+                            .title {
+                                font-size: 13px;
+                                color: #767676;
+                                font-weight: 700;
+                                min-width: 60px;
+                            }
+
+                            .total {
+                                font-size: 24px;
+                                color: #385083;
+                                font-weight: 600;
+                                padding-left: 42px;
+
+                                div {
+                                    min-width: 53px;
+
+                                    span {
+                                        font-size: 14px;
+                                    }
+                                }
+
+                                span.percent {
+                                    display: inline-block;
+                                    background: rgba(117,237,151,.5019607843);
+                                    color: #1ec802;
+                                    font-size: 14px;
+                                    width: 70px;
+                                    margin-left: 10px;
+                                    border-radius: 3px;
+                                    padding: 2px;
+                                    text-align: center;
+                                    padding-top: 5px;
+                                }
+                            }
+                        }
+
+                        .fourth-row {
+                            .title {
+                                font-size: 13px;
+                                color: #767676;
+                                font-weight: 700;
+                                min-width: 60px;
+                            }
+
+                            .total {
+                                font-size: 24px;
+                                color: #385083;
+                                font-weight: 600;
+                                padding-left: 42px;
+
+                                div {
+                                    min-width: 53px;
+
+                                    span {
+                                        font-size: 14px;
+                                    }
+                                }
+
+                                span.percent {
+                                    display: inline-block;
+                                    background: #F2B5B580;
+                                    color: #E34440;
+                                    font-size: 14px;
+                                    width: 70px;
+                                    margin-left: 10px;
+                                    border-radius: 3px;
+                                    padding: 2px;
+                                    text-align: center;
+                                    padding-top: 5px;
+                                }
+                            }
+                        }
+
+                        .fifth-row {
+                            .title {
+                                font-size: 13px;
+                                color: #767676;
+                                font-weight: 700;
+                                min-width: 60px;
+                            }
+
+                            .total {
+                                font-size: 24px;
+                                color: #385083;
+                                font-weight: 600;
+                                padding-left: 42px;
+
+                                div {
+                                    min-width: 53px;
+
+                                    span {
+                                        font-size: 14px;
+                                    }
+                                }
+
+                                span.percent {
+                                    display: inline-block;
+                                    background: rgb(77 77 75 / 50%);
+                                    color: #ffffff;
+                                    font-size: 14px;
+                                    width: 70px;
+                                    margin-left: 10px;
+                                    border-radius: 3px;
+                                    padding: 2px;
+                                    text-align: center;
+                                    padding-top: 5px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

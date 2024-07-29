@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Bend_PSA</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/scss/header.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/scss/header-control.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/scss/main.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Bend_PSA.styles.css" asp-append-version="true" />
+</head>
+<body>
+    @await Html.PartialAsync("Header")
+    @await Html.PartialAsync("HeaderControl")
+
+    <div id="main">
+        @RenderBody()
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/get-current-time.js" asp-append-version="true"></script>
+    <script src="~/js/bootstrap-js.min.js" asp-append-version="true"></script>
+    <script src="~/Chart/chart.js"></script>
+    <script src="~/Chart/chartjs-plugin-datalabels.min.js"></script>
+    <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

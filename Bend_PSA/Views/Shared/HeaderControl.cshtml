@@ -1,0 +1,17 @@
+﻿<div id="header-control" class="d-flex justify-content-between">
+    <div id="time" class="d-flex align-items-center">
+        <div id="date">
+            Thursday, Jan 01, 1970
+        </div>
+        <div id="current-time">
+            08:00:00
+        </div>
+    </div>
+
+    <div id="action" class="d-flex align-items-center">
+        @await Html.PartialAsync("Form/FormChangeReloadModel")
+        @await Html.PartialAsync("Form/FormConfirmClearData")
+        @await Html.PartialAsync("Form/FormSearch")
+        @await Html.PartialAsync("Form/FormSetting")
+    </div>
+</div>
