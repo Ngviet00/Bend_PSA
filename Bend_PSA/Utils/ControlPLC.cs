@@ -42,7 +42,6 @@ namespace Bend_PSA.Utils
                 thReadStatusPLC.Name = "THREAD_READ_STATUS_PLC";
                 thReadStatusPLC.IsBackground = true;
                 thReadStatusPLC.Start();
-                Logs.Log($"Connect to PLC station number {plcStation} successfully!");
             }
             else
             {

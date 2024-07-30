@@ -2,5 +2,6 @@
 {
     public class Constants
     {
+        public const int PERCENT = 100;
     }
 }

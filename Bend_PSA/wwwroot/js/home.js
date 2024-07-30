@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-import { STATUS_PLC, SYSTEM_STATUS_CLIENT, STATUS_RESULT, CLIENT } from "./const.js";
+import { STATUS_PLC, SYSTEM_STATUS_CLIENT, STATUS_RESULT, CLIENT, COLOR_STATUS } from "./const.js";
 
 import { getCurrentDateTime, formatNumberWithDot, convertDate } from "./common.js";
 
@@ -16,6 +16,11 @@ $(function () {
     var previousTray = [];
     var resetPLC = 1;
 
+    const queue = [];
+    let processing = false;
+    let checkHaveCheking = false;
+    let currentIndexRoll = 0;
+
     const noDataTimeLogRow = $('.time-log-no-data');
 
     var statusPLC = null;
@@ -24,6 +29,7 @@ $(function () {
     var ConnectPC = [null, null, null, null]
     var CamPC = [null, null, null, null]
     var DeepLearningPC = [null, null, null, null]
+
 
     for (let i = 1; i <= 4; i++) {
         clearTimeout(timeouts[i]);
@@ -42,23 +48,98 @@ $(function () {
             console.error(err.toString())
         });
 
-    //event receive data
-    connection.on("ReceiveData", (data) => {
-        
+    connection.on("ShowTotalQtyToScreen", (total, ok, ng, empty) => {
+
+        let percentOK = total == 0 ? 0 : parseFloat((ok / total * 100).toFixed(2))
+        let percentNG = total == 0 ? 0 : parseFloat((ng / total * 100).toFixed(2))
+        let percentEmpty = parseFloat((100 - percentOK - percentNG).toFixed(2))
+
+        $('#total-ea').html(`${formatNumberWithDot(total)}<span class="">&nbspEA</span>`);
+        $('#total-ok-ea').html(`${formatNumberWithDot(ok)}<span class="">&nbspEA</span>`);
+        $('#total-ng-ea').html(`${formatNumberWithDot(ng)}<span class="">&nbspEA</span>`);
+        $('#total-empty-ea').html(`${formatNumberWithDot(empty)}<span class="">&nbspEA</span>`);
+
+        $('#percent-ok').html(`${percentOK} %`);
+        $('#percent-ng').html(`${percentNG} %`);
+        $('#percent-empty').html(`${percentEmpty} %`);
+
+        if (percentOK == 0 && percentNG == 0 && percentEmpty == 0) {
+            percentOK = 100;
+        }
+
+        myPieChart.data.datasets[0].data = [percentOK, percentNG, percentEmpty];
+        myPieChart.data.labels = ["OK", "NG", "Empty"];
+        myPieChart.update('none');
+    })
+
+    connection.on("SendDataToClient", (data1, data2, model, currentRoll) => {
+        if (checkHaveCheking) {
+            let valueItemCurrentLeft = $('.current-item .left').html();
+            let valueItemCurrentRight = $('.current-item .right').html();
+
+            $('.previous-item #previous-item-not-data').remove();
+
+            currentIndexRoll += 1;
+
+            let result = `
+                <div style="text-align:left">${currentIndexRoll}</div>
+                <div class="d-flex mt-1">
+                    <div class="left ${valueItemCurrentLeft == 'OK' ? 'ok' : 'ng'}">${valueItemCurrentLeft == 'OK' ? 'NG' : 'NG'}</div>
+                    <div class="right ${valueItemCurrentRight == 'OK' ? 'ok' : 'ng'}">${valueItemCurrentRight == 'OK' ? 'NG' : 'NG'}</div>
+                </div>
+            `;
+
+            $('.previous-item .container').prepend(result);
+        }
+
+        queue.push({ data1, data2 });
+        processQueue(model, currentRoll);
     });
+
+    function processQueue(model, currentRoll) {
+        if (queue.length === 0 || processing) {
+            return;
+        }
+
+        processing = true;
+        checkHaveCheking = true;
+
+        const { data1, data2 } = queue.shift();
+
+        let currentItemLeft = $('.current-item .left');
+        let currentItemRight = $('.current-item .right');
+
+        currentItemLeft.text('Checking...');
+        currentItemLeft.css('background', COLOR_STATUS.CHECKING);
+
+        currentItemRight.text('Checking...');
+        currentItemRight.css('background', COLOR_STATUS.CHECKING);
+
+        setTimeout(() => {
+            currentItemLeft.text(data1.result === STATUS_RESULT.OK ? 'OK' : 'NG');
+            currentItemLeft.css('background', data1.result === STATUS_RESULT.OK ? COLOR_STATUS.OK : COLOR_STATUS.NG);
+
+            currentItemRight.text(data2.result === STATUS_RESULT.OK ? 'OK' : 'NG');
+            currentItemRight.css('background', data2.result === STATUS_RESULT.OK ? COLOR_STATUS.OK : COLOR_STATUS.NG);
+
+            appendResultLog(data1, model, currentRoll);
+            appendResultLog(data2, model, currentRoll);
+
+            processing = false;
+            processQueue(model, currentRoll);
+        }, 150);
+    }
 
     //====================================================== CONFIG CHART ======================================================
     var ctx = document.getElementById('pie-chart').getContext('2d');
 
-    var valueChart = document.getElementById('data-chart-percent');
-
     var values = [
-        parseFloat(valueChart.getAttribute('data-percent-chart-ok')),
-        parseFloat(valueChart.getAttribute('data-percent-chart-ng')),
-        parseFloat(valueChart.getAttribute('data-percent-chart-empty')),
+        percentOK,
+        percentNG,
+        percentEmpty
     ];
 
-    if (values[0] == 0 && values[1] == 0 && values[2] == 0) {
+    if (percentOK == 0 && percentNG == 0 && percentEmpty == 0) {
         values = [100, 0, 0]
     }
 
@@ -128,38 +209,17 @@ $(function () {
         `);
     }
 
-    function appendResultLog(data) {
+    function appendResultLog(data, model, currentRoll) {
         $("#result-log table tbody").prepend(`
             <tr>
                 <td>${convertDate(data.time)}</td >
-                <td class="text-capitalize">${data.model}</td>
-                <td>${data.tray}</td>
-                <td class="text-capitalize">${data.side}</td>
-                <td>${data.index}</td>
-                <td class="text-capitalize">${data.camera}</td>
-                <td class="status-item ${data.result === 1 ? "text-success" : "text-danger"}">
-                    ${data.result == STATUS_RESULT.OK ? "OK" : (data.result == STATUS_RESULT.NG ? "NG" : (data.result == STATUS_RESULT.EMPTY ? "EMPTY" : ""))}
-                </td>
-                <td class="detail-error">
-                    ${data.result == STATUS_RESULT.OK || data.result == STATUS_RESULT.EMPTY ? "-" : data.error ?? "-"}
-                </td>
+                <td class="text-capitalize">${model == '' ? 'Stiff_953' : model}</td>
+                <td>${data.clientId}</td>
+                <td>${currentRoll}</td>
+                <td>${result == STATUS_RESULT.OK ? 'OK' : 'NG'}</td>
+                <td>1</td>
             </tr>
         `);
-
-        if (data.result === STATUS_RESULT.OK) {
-            $(`.${data.side}-${data.camera}-${data.index}`).css("background", "#66b032").text("OK");
-            return;
-        }
-
-        if (data.result === STATUS_RESULT.NG) {
-            $(`.${data.side}-${data.camera}-${data.index}`).css("background", "#e4491d").text("NG");
-            return;
-        }
-
-        if (data.result === STATUS_RESULT.EMPTY) {
-            $(`.${data.side}-${data.camera}-${data.index}`).css("background", "#9F9F9F").text("Empty");
-            return;
-        }
     }
 
     //====================================================== Form search and load more ======================================================

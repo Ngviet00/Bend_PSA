@@ -24,3 +24,10 @@ export const CLIENT = Object.freeze({
     'CLIENT_3': 3,
     'CLIENT_4': 4,
 });
+
+export const COLOR_STATUS = Object.freeze({
+    'OK': '#5FB522',
+    'NG': '#E4491D',
+    'EMPTY': '#a7a7a7',
+    'CHECKING': '#e9e413',
+});

@@ -149,10 +149,9 @@ $color_3C3C3C: #3C3C3C;
                     }
 
                     .lbl-number {
-                        font-size: 24px;
+                        font-size: 20px;
                         color: #385083;
                         font-weight: 600;
-                        padding: 10px;
                     }
                 }
 
@@ -165,7 +164,7 @@ $color_3C3C3C: #3C3C3C;
                     }
 
                     .total {
-                        font-size: 24px;
+                        font-size: 20px;
                         color: #385083;
                         font-weight: 600;
                         padding-left: 42px;
@@ -185,7 +184,7 @@ $color_3C3C3C: #3C3C3C;
                     }
 
                     .total {
-                        font-size: 24px;
+                        font-size: 20px;
                         color: #385083;
                         font-weight: 600;
                         padding-left: 42px;
@@ -222,7 +221,7 @@ $color_3C3C3C: #3C3C3C;
                     }
 
                     .total {
-                        font-size: 24px;
+                        font-size: 20px;
                         color: #385083;
                         font-weight: 600;
                         padding-left: 42px;
@@ -259,7 +258,7 @@ $color_3C3C3C: #3C3C3C;
                     }
 
                     .total {
-                        font-size: 24px;
+                        font-size: 20px;
                         color: #385083;
                         font-weight: 600;
                         padding-left: 42px;
@@ -407,7 +406,7 @@ $color_3C3C3C: #3C3C3C;
 
     #log-inspection {
         padding-bottom: 3em;
-        padding: 10px;
+        padding: 0px 10px 10px 10px;
 
         #result-log {
             flex-basis: 65%;
@@ -421,7 +420,7 @@ $color_3C3C3C: #3C3C3C;
         padding: 10px;
 
         #result {
-            flex-basis: 49%;
+            flex-basis: 50.5%;
             background: #F2F5FF;
             border-radius: 3px;
             padding: 7px 10px;
@@ -433,219 +432,97 @@ $color_3C3C3C: #3C3C3C;
                 line-height: 24px;
             }
 
-            .current-tray {
+            .current-item {
                 flex-basis: 49%;
 
-                h3#title-current-tray {
+                h3#title-current-item {
                     font-size: 14px;
                     font-weight: 600;
                     line-height: 24px;
                     letter-spacing: 0em;
                     text-align: left;
                     color: #4F5AED;
-                    padding-left: 30px;
                 }
 
-                .current-time {
-                    font-family: Inter;
-                    font-size: 14px;
-                    letter-spacing: 0;
-                    text-align: left;
-                    color: #666666;
-                    font-weight: 700;
-                    margin-bottom: 10px;
-                    padding-left: 30px;
+                .container {
+                    border: 1px solid #4f5aed;
+                    height: 29rem;
                 }
 
-                .check-item {
-                    .no-number {
-                        flex-basis: 7%;
+                .left {
+                    flex-basis: 50%;
+                    background: #a7a7a7;
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                }
 
-                        .empty-row {
-                            text-align: center;
-                            margin-bottom: 15px;
-                            font-size: 25px;
-                        }
-
-                        .no {
-                            font-size: 12px;
-                            text-align: center;
-                        }
-
-                        .stt {
-                            font-size: 12px;
-                            padding: 6.5px 0;
-                            border-bottom: 1px solid #c3c3c3;
-                            text-align: center;
-                        }
-                    }
-
-                    .is-check-tray {
-                        flex-basis: 36%;
-                        border: 1px solid #8e93cd;
-                        background: white;
-                        padding: 0px 15px 7px 15px;
-
-                        .title-cam {
-                            font-size: 14px;
-                            font-weight: 700;
-                            line-height: 24px;
-                            letter-spacing: 0em;
-                            color: #767676;
-                        }
-
-                        .type-camera {
-                            font-size: 12px;
-                            font-weight: 600;
-                            color: #3C3C3C;
-                        }
-
-                        .ng-ok {
-
-                            .left-tray, .right-tray {
-                                flex-basis: 49%;
-
-                                span {
-                                    border-bottom: 1px solid white !important;
-                                }
-                            }
-
-                            div {
-                                border-bottom: 1px solid white;
-                            }
-
-                            .ng {
-                                flex-basis: 48%;
-                                text-align: center;
-                                background: #CDCECF;
-                                border-right: 1px solid #fff;
-                                color: #fff;
-                                font-size: 11px;
-                                padding: 7px 0px;
-                            }
-
-                            .ok {
-                                flex-basis: 48%;
-                                text-align: center;
-                                background: #CDCECF;
-                                border-right: 1px solid #fff;
-                                color: #fff;
-                                font-size: 11px;
-                                padding: 7px 0px;
-                            }
-                        }
-                    }
-
-                    .checking-tray-left {
-                        border-right: none;
-                    }
+                .right {
+                    flex-basis: 49%;
+                    background: #a7a7a7;
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
                 }
             }
 
-            .previous-tray {
+            .previous-item {
                 flex-basis: 49%;
 
-                h3#title-previous-tray {
+                h3#title-previous-item {
                     font-size: 14px;
                     font-weight: 600;
                     line-height: 24px;
                     letter-spacing: 0em;
                     text-align: left;
                     color: #4F5AED;
-                    padding-left: 30px;
                 }
 
-                .previous-time {
-                    font-family: Inter;
-                    font-size: 14px;
-                    letter-spacing: 0;
-                    text-align: left;
-                    color: #666666;
-                    font-weight: 700;
-                    margin-bottom: 10px;
-                    padding-left: 30px;
+                .container {
+                    border: 1px solid #4f5aed;
+                    height: 29rem;
+                    padding-top: 5px;
+                    padding-bottom: 5px;
+                    height: 464px;
+                    overflow-y: auto;
+
+                    > div {
+                        justify-content: space-between;
+
+                        div {
+                            height: 40px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                            font-size: 12px;
+                        }
+
+                        div.left {
+                            flex-basis: 50%;
+                        }
+
+                        div.right {
+                            flex-basis: 49%;
+                        }
+                    }
                 }
 
-                .check-item {
-                    .no-number {
-                        flex-basis: 7%;
+                .ok {
+                    background: #5FB522;
+                }
 
-                        .empty-row {
-                            text-align: center;
-                            margin-bottom: 15px;
-                            font-size: 25px;
-                        }
+                .ng {
+                    background: #E4491D;
+                }
 
-                        .no {
-                            font-size: 12px;
-                            text-align: center;
-                        }
-
-                        .stt {
-                            font-size: 12px;
-                            padding: 6.5px 0;
-                            border-bottom: 1px solid #c3c3c3;
-                            text-align: center;
-                        }
-                    }
-
-                    .is-check-tray {
-                        flex-basis: 36%;
-                        border: 1px solid #8e93cd;
-                        background: white;
-                        padding: 0px 15px 7px 15px;
-
-                        .title-cam {
-                            font-size: 14px;
-                            font-weight: 700;
-                            line-height: 24px;
-                            letter-spacing: 0em;
-                            color: #767676;
-                        }
-
-                        .type-camera {
-                            font-size: 12px;
-                            font-weight: 600;
-                            color: #3C3C3C;
-                        }
-
-                        .ng-ok {
-                            div {
-                                border-bottom: 1px solid white;
-                            }
-
-                            .ok, .ng, .wait, .empty {
-                                max-height: 26px !important;
-                                flex-basis: 48%;
-                                text-align: center;
-                                border-right: 1px solid #fff;
-                                color: #fff;
-                                font-size: 11px;
-                                padding: 7px 0px;
-                                border-bottom: 1px solid white !important;
-                            }
-
-                            .ng {
-                                background: #E4491D !important;
-                            }
-
-                            .ok {
-                                background: #66b032 !important;
-                            }
-
-                            .wait {
-                                background: #cdcecf !important;
-                            }
-
-                            .empty {
-                                background: #9F9F9F !important;
-                            }
-                        }
-                    }
-
-                    .checking-tray-left {
-                        border-right: none;
-                    }
+                .empty {
                 }
             }
         }

@@ -33,6 +33,7 @@ namespace Bend_PSA.Services
                         await SendDataToPLC(result);
                         await SaveToDB(dataRequest1, dataRequest2);
                         await ShowTotalQtyToScreen(result);
+                        await _homeHub.Clients.All.SendAsync("SendDataToClient", dataRequest1, dataRequest2, Global.CurrentModel, Global.CurrentRoll);
                     }
                 }
                 await Task.Delay(200);
