@@ -91,9 +91,9 @@
                             @for (int i = 1; i <= 2; i++)
                             {
                                 <div class="mb-3">
-                                    <label class="label-title">PC@{@i}-Area Camera:</label>
+                                    <label class="label-title">PC@{@i}:</label>
 
-                                    <span class="mx-4">
+                                    <span>
                                         <span class="dot-connect-@i div-status"></span>
                                         <label>Connect</label>
                                     </span>
@@ -181,6 +181,7 @@
         var percentOK = @Html.Raw(Json.Serialize(ViewBag.PercentChartOK));
         var percentNG = @Html.Raw(Json.Serialize(ViewBag.PercentChartNG));
         var percentEmpty = @Html.Raw(Json.Serialize(ViewBag.PercentChartEmpty));
+        var currentStatusPLC = @Html.Raw(Json.Serialize(ViewBag.currentStatusPLC));
     </script>
 
     <script type="module" src="~/js/home.js"></script>

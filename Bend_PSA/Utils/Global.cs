@@ -13,11 +13,30 @@ namespace Bend_PSA.Utils
         public static int TotalNG = 0;
         public static int TotalEmpty = 0;
 
-        public static int RunMode = 2;
+        public static int RunMode = (int)ERunMode.NORMAL;
         public static int CurrentRoll = 1;
         public static int CurrentIndexPLC = 1;
 
+        public static short CONNECT_1 = Constants.INACTIVE;
+        public static short CONNECT_2 = Constants.INACTIVE;
+
+        public static short CAM_1 = Constants.INACTIVE;
+        public static short CAM_2 = Constants.INACTIVE;
+
+        public static short DEEP_LEARNING_1 = Constants.INACTIVE;
+        public static short DEEP_LEARNING_2 = Constants.INACTIVE;
+
+        public static System.Timers.Timer? timerClientConnect1 = null;
+        public static System.Timers.Timer? timerClientConnect2 = null;
+
+        public static System.Timers.Timer? timerClientCam1 = null;
+        public static System.Timers.Timer? timerClientCam2 = null;
+
+        public static System.Timers.Timer? timerClientDeepLearning1 = null;
+        public static System.Timers.Timer? timerClientDeepLearning2 = null;
+
         public static string CurrentModel = string.Empty;
+        public static List<string> ListModels = [];
 
         public static string PathDownloadImage = @"D:\publish_image";
 

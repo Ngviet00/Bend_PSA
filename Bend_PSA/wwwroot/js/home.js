@@ -26,9 +26,9 @@ $(function () {
     var statusPLC = null;
     var statusClient = null;
 
-    var ConnectPC = [null, null, null, null]
-    var CamPC = [null, null, null, null]
-    var DeepLearningPC = [null, null, null, null]
+    var ClientConnect = [null, null]
+    var ClientCam = [null, null]
+    var ClientDeepLearning = [null, null]
 
 
     for (let i = 1; i <= 4; i++) {
@@ -36,6 +36,8 @@ $(function () {
         clearTimeout(deepcores[i]);
         clearTimeout(clientConnects[i]);
     }
+
+    setStatusPLC(currentStatusPLC);
 
     //====================================================== EVENT REALTIME ======================================================
 
@@ -49,7 +51,6 @@ $(function () {
         });
 
     connection.on("ShowTotalQtyToScreen", (total, ok, ng, empty) => {
-
         let percentOK = total == 0 ? 0 : parseFloat((ok / total * 100).toFixed(2))
         let percentNG = total == 0 ? 0 : parseFloat((ng / total * 100).toFixed(2))
         let percentEmpty = parseFloat((100 - percentOK - percentNG).toFixed(2))
@@ -71,6 +72,77 @@ $(function () {
         myPieChart.data.labels = ["OK", "NG", "Empty"];
         myPieChart.update('none');
     })
+    connection.on("StatusPLC", (statusPLC) => {
+        setStatusPLC(statusPLC);
+    });
+
+    function setStatusPLC(status) {
+        if (status == STATUS_PLC.DISCONNECTED) {
+            _status.css("color", "#222222").css("background", "#E6E6E6").text("Disconnect");
+            $('#select-model').prop('disabled', false);
+            $('.btn-reload-model').prop('disabled', false);
+            $('.btn-clear-data').prop('disabled', false);
+            $('.mode-run').prop('disabled', false);
+            $('#form-setting .button-delete-all-data').prop('disabled', false)
+
+            if (statusPLC != status) {
+                appendTimeLog(getCurrentDateTime(), "PLC", `PLC Disconnected!`);
+                statusPLC = status;
+            }
+
+            return;
+        }
+
+        if (status == STATUS_PLC.ALARM) {
+            _status.css("color", "#3C3C3C").css("background", "#FFCA08").text("Alarm");
+            if (statusPLC != status) {
+                appendTimeLog(getCurrentDateTime(), "PLC", `PLC Alarm!`);
+                statusPLC = status;
+            }
+            return;
+        }
+
+        if (status == STATUS_PLC.EMG) {
+            _status.css("color", "#E34440").css("background", "#FD53083D").text("EMG");
+            if (statusPLC != status) {
+                appendTimeLog(getCurrentDateTime(), "PLC", `PLC EMG!`);
+                statusPLC = status;
+            }
+            return;
+        }
+
+        if (status == STATUS_PLC.START) {
+            _status.css("color", "#ffffff").css("background", "#49A31D").text("Start");
+            $('#select-model').prop('disabled', true);
+            $('.btn-reload-model').prop('disabled', true);
+            $('.btn-clear-data').prop('disabled', true);
+            $('.mode-run').prop('disabled', true);
+            $('#form-setting .button-delete-all-data').prop('disabled', true)
+
+            if (statusPLC != status) {
+                appendTimeLog(getCurrentDateTime(), "PLC", `PLC Start!`);
+                statusPLC = status;
+            }
+
+            return;
+        }
+
+        if (status == STATUS_PLC.STOP) {
+            _status.css("color", "#ffffff").css("background", "#E4491D").text("Stop");
+            $('#select-model').prop('disabled', false);
+            $('.btn-reload-model').prop('disabled', false);
+            $('.btn-clear-data').prop('disabled', false);
+            $('.mode-run').prop('disabled', false);
+            $('#form-setting .button-delete-all-data').prop('disabled', false)
+
+            if (statusPLC != status) {
+                appendTimeLog(getCurrentDateTime(), "PLC", `PLC Stop!`);
+                statusPLC = status;
+            }
+
+            return;
+        }
+    }
 
     connection.on("SendDataToClient", (data1, data2, model, currentRoll) => {
         if (checkHaveCheking) {
@@ -96,6 +168,79 @@ $(function () {
         processQueue(model, currentRoll);
     });
 
+    function setStatusPLC(status) {
+        let _status = $('#value-plc-status');
+        let _message = $('#error-plc-status')
+
+        status == STATUS_PLC.ALARM ? _message.removeClass('d-none') : _message.addClass('d-none');
+
+        if (status == STATUS_PLC.DISCONNECTED) {
+            _status.css("color", "#222222").css("background", "#E6E6E6").text("Disconnect");
+            $('#select-model').prop('disabled', false);
+            $('.btn-reload-model').prop('disabled', false);
+            $('.btn-clear-data').prop('disabled', false);
+            $('.mode-run').prop('disabled', false);
+            $('#form-setting .button-delete-all-data').prop('disabled', false)
+
+            if (statusPLC != status) {
+                appendTimeLog(getCurrentDateTime(), "PLC", `PLC Disconnected!`);
+                statusPLC = status;
+            }
+
+            return;
+        }
+
+        if (status == STATUS_PLC.ALARM) {
+            _status.css("color", "#3C3C3C").css("background", "#FFCA08").text("Alarm");
+            if (statusPLC != status) {
+                appendTimeLog(getCurrentDateTime(), "PLC", `PLC Alarm!`);
+                statusPLC = status;
+            }
+            return;
+        }
+
+        if (status == STATUS_PLC.EMG) {
+            _status.css("color", "#E34440").css("background", "#FD53083D").text("EMG");
+            if (statusPLC != status) {
+                appendTimeLog(getCurrentDateTime(), "PLC", `PLC EMG!`);
+                statusPLC = status;
+            }
+            return;
+        }
+
+        if (status == STATUS_PLC.START) {
+            _status.css("color", "#ffffff").css("background", "#49A31D").text("Start");
+            $('#select-model').prop('disabled', true);
+            $('.btn-reload-model').prop('disabled', true);
+            $('.btn-clear-data').prop('disabled', true);
+            $('.mode-run').prop('disabled', true);
+            $('#form-setting .button-delete-all-data').prop('disabled', true)
+
+            if (statusPLC != status) {
+                appendTimeLog(getCurrentDateTime(), "PLC", `PLC Start!`);
+                statusPLC = status;
+            }
+
+            return;
+        }
+
+        if (status == STATUS_PLC.STOP) {
+            _status.css("color", "#ffffff").css("background", "#E4491D").text("Stop");
+            $('#select-model').prop('disabled', false);
+            $('.btn-reload-model').prop('disabled', false);
+            $('.btn-clear-data').prop('disabled', false);
+            $('.mode-run').prop('disabled', false);
+            $('#form-setting .button-delete-all-data').prop('disabled', false)
+
+            if (statusPLC != status) {
+                appendTimeLog(getCurrentDateTime(), "PLC", `PLC Stop!`);
+                statusPLC = status;
+            }
+
+            return;
+        }
+    }
+
     function processQueue(model, currentRoll) {
         if (queue.length === 0 || processing) {
             return;
@@ -110,16 +255,16 @@ $(function () {
         let currentItemRight = $('.current-item .right');
 
         currentItemLeft.text('Checking...');
-        currentItemLeft.css('background', COLOR_STATUS.CHECKING);
-
         currentItemRight.text('Checking...');
+
+        currentItemLeft.css('background', COLOR_STATUS.CHECKING);
         currentItemRight.css('background', COLOR_STATUS.CHECKING);
 
         setTimeout(() => {
             currentItemLeft.text(data1.result === STATUS_RESULT.OK ? 'OK' : 'NG');
-            currentItemLeft.css('background', data1.result === STATUS_RESULT.OK ? COLOR_STATUS.OK : COLOR_STATUS.NG);
-
             currentItemRight.text(data2.result === STATUS_RESULT.OK ? 'OK' : 'NG');
+
+            currentItemLeft.css('background', data1.result === STATUS_RESULT.OK ? COLOR_STATUS.OK : COLOR_STATUS.NG);
             currentItemRight.css('background', data2.result === STATUS_RESULT.OK ? COLOR_STATUS.OK : COLOR_STATUS.NG);
 
             appendResultLog(data1, model, currentRoll);
@@ -129,6 +274,78 @@ $(function () {
             processQueue(model, currentRoll);
         }, 150);
     }
+
+    connection.on("VisionBusy", (value) => {
+        let _status = $('#value-system-status');
+
+        if (value) {
+            _status.css("color", "#ffffff").css("background", "#49A31D").text("Running");
+            if (statusClient != value) {
+                appendTimeLog(getCurrentDateTime(), "Client", "Client is running!");
+                statusClient = value;
+            }
+            return;
+        }
+        else {
+            _status.css("color", "#344054").css("background", "#E6E6E6").text("Pause");
+            if (statusClient != value) {
+                appendTimeLog(getCurrentDateTime(), "Client", "Client is pause!");
+                statusClient = value;
+            }
+            return;
+        }
+    })
+
+    connection.on("ClientConnect", (clientId, value) => {
+        $(".dot-connect-" + clientId).css("background", value ? '#0ad90a' : '#b6b9b6')
+
+        if (value) {
+            if (ClientConnect[clientId] != value) {
+                appendTimeLog(getCurrentDateTime(), "Client", `Client PC ${clientId} is connected!`)
+                ClientConnect[clientId] = value;
+            }
+        }
+        else {
+            if (ClientConnect[clientId] != value) {
+                appendTimeLog(getCurrentDateTime(), "Client", `Client PC ${clientId} is disconnected!`)
+                ClientConnect[clientId] = value;
+            }
+        }
+    })
+
+    connection.on("ClientCam", (clientId, value) => {
+        $(".dot-cam-" + clientId).css("background", value ? '#0ad90a' : '#b6b9b6')
+
+        if (value) {
+            if (ClientCam[clientId] != value) {
+                appendTimeLog(getCurrentDateTime(), "Cam", `Cam PC ${clientId} is connected!`)
+                ClientCam[clientId] = value;
+            }
+        }
+        else {
+            if (ClientCam[clientId] != value) {
+                appendTimeLog(getCurrentDateTime(), "Cam", `Cam PC ${clientId} is disconnected!`)
+                ClientCam[clientId] = value;
+            }
+        }
+    })
+
+    connection.on("ClientDeepLearning", (clientId, value) => {
+        $(".dot-deep-core-" + clientId).css("background", value ? '#0ad90a' : '#b6b9b6')
+
+        if (value) {
+            if (ClientDeepLearning[clientId] != value) {
+                appendTimeLog(getCurrentDateTime(), "DeepLearning", `DeepLearning PC ${clientId} is connected!`)
+                ClientDeepLearning[clientId] = value;
+            }
+        }
+        else {
+            if (ClientDeepLearning[clientId] != value) {
+                appendTimeLog(getCurrentDateTime(), "DeepLearning", `DeepLearning PC ${clientId} is disconnected!`)
+                ClientDeepLearning[clientId] = value;
+            }
+        }
+    })
 
     //====================================================== CONFIG CHART ======================================================
     var ctx = document.getElementById('pie-chart').getContext('2d');
@@ -221,6 +438,18 @@ $(function () {
             </tr>
         `);
     }
+
+    $(document).on('change', '#select-model', function () {
+        var selectedValue = $(this).val();
+        if (selectedValue != "") {
+            connection.invoke("ChangeModel", selectedValue).then(function (res) {
+                appendTimeLog(getCurrentDateTime(), "Server", `Server change to model ${selectedValue}`);
+                alert("Change model successfully!");
+            }).catch(function (err) {
+                console.error("Error calling API:", err.toString());
+            });
+        }
+    });
 
     //====================================================== Form search and load more ======================================================
     /*var pageListResult = 1;

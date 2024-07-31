@@ -71,6 +71,14 @@ namespace Bend_PSA
                     IsBackground = true
                 };
                 thAutoDeleteDataOlder3Month.Start();
+
+                //THREAD CHECK STATUS VISION IS BUSY OR NOT
+                Thread thCheckStatusVisionBusy = new(async () => await dataService.CheckStatusVisionBusy())
+                {
+                    Name = "THREAD_CHECK_STATUS_VISION_BUSY",
+                    IsBackground = true
+                };
+                thCheckStatusVisionBusy.Start();
             }
 
             if (!app.Environment.IsDevelopment())

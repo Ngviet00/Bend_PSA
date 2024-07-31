@@ -1,5 +1,6 @@
 ﻿using ActUtlType64Lib;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Bend_PSA.Utils
 {
@@ -7,12 +8,37 @@ namespace Bend_PSA.Utils
     {
         public static ControlPLC? _instance;
         private static readonly object _lock = new();
-        private readonly ActUtlType64 _plc = new();
+        private ActUtlType64 _plc = new ActUtlType64();
         private const int plcStation = 1;
         private const int timeSleep = 100;
+
         private const string REGISTER_PLC_WRITE = "D";
 
+        public const string REGISTER_PLC_READ_STATUS = "D20";
+        private const string REGISTER_PLC_VISION_BUSY= "M420";
+
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        private int _statusPLC;
+
+        public int StatusPLC
+        {
+            get { return _statusPLC; }
+
+            set
+            {
+                if (_statusPLC != value)
+                {
+                    _statusPLC = value;
+                    Notify();
+                }
+            }
+        }
+
+        public void Notify([CallerMemberName] string name = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
 
         public ControlPLC()
         {
@@ -49,16 +75,22 @@ namespace Bend_PSA.Utils
             }
         }
 
-        private static async Task ReadStatusPLC()
+        private async Task ReadStatusPLC()
         {
             while (true)
             {
-                //read all data
-                //assign variable
-                //notify
-                //Console.WriteLine("11");
+                _plc.ReadDeviceBlock(REGISTER_PLC_READ_STATUS, 1, out int valueReaded);
+                StatusPLC = valueReaded;
                 await Task.Delay(timeSleep);
             }
+        }
+
+        public int ReadDeviceBlock(string address)
+        {
+            int valueReaded = 0;
+            _plc.ReadDeviceBlock(REGISTER_PLC_READ_STATUS, 1, out valueReaded);
+
+            return valueReaded;
         }
 
         public bool SetBitDevice2(string address, short signal)
@@ -86,6 +118,18 @@ namespace Bend_PSA.Utils
             {
                 Logs.Log($"Error can not WriteToRegister in ControlPLC, error: {ex.Message}");
                 return false;
+            }
+        }
+
+        public void VisionBusy(bool result)
+        {
+            try
+            {
+                _plc.SetDevice2(REGISTER_PLC_VISION_BUSY, result ? (short)1 : (short)0);
+            }
+            catch (Exception ex)
+            {
+                Logs.Log($"Error can not set VisionBusy in ControlPLC, error: {ex.Message}");
             }
         }
     }

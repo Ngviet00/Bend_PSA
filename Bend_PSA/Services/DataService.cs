@@ -236,5 +236,25 @@ namespace Bend_PSA.Services
                 DeleteImageDownload(directory);
             }
         }
+
+        public async Task CheckStatusVisionBusy()
+        {
+            while (true)
+            {
+                if (Global.CONNECT_1 == Constants.ACTIVE && Global.CONNECT_2 == Constants.ACTIVE &&
+                    Global.CAM_1 == Constants.ACTIVE && Global.CAM_2 == Constants.ACTIVE &&
+                    Global.DEEP_LEARNING_1 == Constants.ACTIVE && Global.DEEP_LEARNING_2 == Constants.ACTIVE)
+                {
+                    await _homeHub.Clients.All.SendAsync("VisionBusy", true);
+                    ControlPLC.Instance.VisionBusy(false);
+                }
+                else
+                {
+                    await _homeHub.Clients.All.SendAsync("VisionBusy", false);
+                    ControlPLC.Instance.VisionBusy(true);
+                }
+                await Task.Delay(200);
+            }
+        }
     }
 }

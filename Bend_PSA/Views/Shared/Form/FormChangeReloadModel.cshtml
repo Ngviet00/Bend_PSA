@@ -1,10 +1,15 @@
-﻿<div class="d-flex align-items-center" style="margin-right: 1.5em">
+﻿@{
+    var CurrentModel = ViewBag.CurrentModel;
+}
+
+<div class="d-flex align-items-center" style="margin-right: 1.5em">
     <label for="select-model d-inline-block mr-5" style="margin-right: 10px;font-weight: bold">Model</label>
-    <select id="select-model" class="form-select" name="select_model">
+    <select id="select-model" class="form-select" name="select_model" asp-for="@CurrentModel">
         <option value="" selected disabled>Choose Model</option>
-        <option value="1">Option 1</option>
-        <option value="2">Option 2</option>
-        <option value="3">Option 3</option>
+        @foreach (var item in ViewBag.ListModels)
+        {
+            <option value="@item">@item</option>
+        }
     </select>
     <button class="btn btn-secondary btn-reload-model" style="margin-left: 10px">Reload</button>
 </div>

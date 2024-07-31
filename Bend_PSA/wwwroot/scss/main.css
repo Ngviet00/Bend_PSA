@@ -46,7 +46,7 @@
   flex-direction: column;
   display: flex;
   overflow-y: scroll;
-  max-height: 146px;
+  max-height: 130px;
   overflow-x: hidden;
 }
 .wrap-content .ea_table tbody tr:nth-child(2n+1) {

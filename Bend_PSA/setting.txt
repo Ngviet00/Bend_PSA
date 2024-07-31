@@ -5,3 +5,5 @@ RunMode= 2
 CurrentRoll = 1
 CurrentIndexPLC = 1
 Timeline= 123456789
+CurrentModel= 
+ListModels= Stiff_953_PSA, Stiff_954_PSA
