@@ -151,7 +151,7 @@ namespace Bend_PSA.Services
 
         public async Task SendDataToPLC(int data)
         {
-            if (!ControlPLC.Instance.WriteToRegister(Global.CurrentIndexPLC, data))
+            if (!Global.plc.WriteToRegister(Global.CurrentIndexPLC, data))
             {
                 await _homeHub.Clients.All.SendAsync("SendDataPLCError", "Error can not send data to PLC!");
             }
@@ -257,12 +257,12 @@ namespace Bend_PSA.Services
                         && !string.IsNullOrWhiteSpace(Global.CurrentModel))
                     {
                         await _homeHub.Clients.All.SendAsync("VisionBusy", true);
-                        ControlPLC.Instance.VisionBusy(false);
+                        Global.plc.VisionBusy(false);
                     }
                     else
                     {
                         await _homeHub.Clients.All.SendAsync("VisionBusy", false);
-                        ControlPLC.Instance.VisionBusy(true);
+                        Global.plc.VisionBusy(true);
                     }
                     await Task.Delay(200);
                 }

@@ -6,7 +6,6 @@ namespace Bend_PSA.Utils
 {
     public class ControlPLC : INotifyPropertyChanged
     {
-        public static ControlPLC? _instance;
         private static readonly object _lock = new();
         private ActUtlType64 _plc = new ActUtlType64();
         private const int plcStation = 1;
@@ -45,24 +44,9 @@ namespace Bend_PSA.Utils
             _plc.ActLogicalStationNumber = plcStation;
         }
 
-        public static ControlPLC Instance
-        {
-            get
-            {
-                lock (_lock)
-                {
-                    if (_instance == null)
-                    {
-                        _instance = new ControlPLC();
-                    }
-                    return _instance;
-                }
-            }
-        }
-
         public void ConnectPLC()
         {
-            if (_plc.Open() == 0)
+            if (_plc.Open() == 0 || _plc.Open() == 25202689)
             {
                 Thread thReadStatusPLC = new Thread(async () => await ReadStatusPLC());
                 thReadStatusPLC.Name = "THREAD_READ_STATUS_PLC";

@@ -9,6 +9,8 @@ namespace Bend_PSA.Utils
         public static ConcurrentQueue<DataRequest> dataClient1 = new();
         public static ConcurrentQueue<DataRequest> dataClient2 = new();
 
+        public static ControlPLC plc = new();
+
         public static int TotalOK = 0;
         public static int TotalNG = 0;
         public static int TotalEmpty = 0;

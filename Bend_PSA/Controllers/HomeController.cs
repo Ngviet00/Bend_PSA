@@ -23,7 +23,7 @@ namespace Bend_PSA.Controllers
         {
             GetDataHomePage();
 
-            ControlPLC.Instance.PropertyChanged += PLCPropertyChanged;
+            Global.plc.PropertyChanged += PLCPropertyChanged;
 
             return View();
         }
@@ -60,7 +60,7 @@ namespace Bend_PSA.Controllers
             ViewBag.PercentChartNG = ViewBag.Total == 0 ? 0 : Math.Round((double)Global.TotalNG / (double)ViewBag.Total * Constants.PERCENT, 2);
             ViewBag.PercentChartEmpty = ViewBag.Total == 0 ? 0 : Math.Round((double)Global.TotalEmpty / (double)ViewBag.Total * Constants.PERCENT, 2);
             
-            ViewBag.currentStatusPLC = ControlPLC.Instance.ReadDeviceBlock(ControlPLC.REGISTER_PLC_READ_STATUS);
+            ViewBag.currentStatusPLC = Global.plc.ReadDeviceBlock(ControlPLC.REGISTER_PLC_READ_STATUS);
         }
 
         public IActionResult ClearData()

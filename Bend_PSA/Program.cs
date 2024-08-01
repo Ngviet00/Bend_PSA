@@ -42,7 +42,7 @@ namespace Bend_PSA
             var app = builder.Build();
 
             //CONNECT PLC
-            ControlPLC.Instance.ConnectPLC();
+            Global.plc.ConnectPLC();
 
             using (var scope = app.Services.CreateScope())
             {
