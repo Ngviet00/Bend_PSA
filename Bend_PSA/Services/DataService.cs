@@ -1,6 +1,7 @@
 ﻿using Bend_PSA.Context;
 using Bend_PSA.Models.Entities;
 using Bend_PSA.Models.Requests;
+using Bend_PSA.Models.Responses;
 using Bend_PSA.Utils;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -71,74 +72,81 @@ namespace Bend_PSA.Services
 
         public async Task SaveToDB(DataRequest data1, DataRequest data2)
         {
-            using var scope = _scopeFactory.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-            List<Image> images = [];
-            List<Error> errors = [];
-
-            var result = new Data
+            try
             {
-                Model = Global.CurrentModel,
-                Roll = Global.CurrentRoll,
-                Result1 = data1.Result,
-                Result2 = data2.Result,
-                TimeLine = Global.TimeLine
-            };
+                using var scope = _scopeFactory.CreateScope();
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-            await context.Data.AddAsync(result);
-            await context.SaveChangesAsync();
+                List<Image> images = [];
+                List<Error> errors = [];
 
-            if (result.Id == Guid.Empty)
-            {
-                throw new Exception("Failed to generate DataId.");
+                var result = new Data
+                {
+                    Model = Global.CurrentModel,
+                    Roll = Global.CurrentRoll,
+                    Result1 = data1.Result,
+                    Result2 = data2.Result,
+                    TimeLine = Global.TimeLine
+                };
+
+                await context.Data.AddAsync(result);
+                await context.SaveChangesAsync();
+
+                if (result.Id == Guid.Empty)
+                {
+                    throw new Exception("Failed to generate DataId.");
+                }
+
+                var finalResult = GetResultItem(data1, data2);
+
+                if (finalResult == (int)EDataStatus.NG)
+                {
+                    foreach (var item in data1.Errors)
+                    {
+                        errors.Add(new Error
+                        {
+                            DataId = result.Id,
+                            TypeError = item.ErrorCode
+                        });
+                    }
+
+                    foreach (var item in data2.Errors)
+                    {
+                        errors.Add(new Error
+                        {
+                            DataId = result.Id,
+                            TypeError = item.ErrorCode
+                        });
+                    }
+
+                    foreach (var item in data1.Images)
+                    {
+                        images.Add(new Image
+                        {
+                            DataId = result.Id,
+                            PathUrl = item.PathImage
+                        });
+                    }
+
+                    foreach (var item in data2.Images)
+                    {
+                        images.Add(new Image
+                        {
+                            DataId = result.Id,
+                            PathUrl = item.PathImage
+                        });
+                    }
+                }
+
+                await context.Error.AddRangeAsync(errors);
+                await context.Image.AddRangeAsync(images);
+
+                await context.SaveChangesAsync();
             }
-
-            var finalResult = GetResultItem(data1, data2);
-
-            if (finalResult == (int)EDataStatus.NG)
+            catch (Exception ex)
             {
-                foreach (var item in data1.Errors)
-                {
-                    errors.Add(new Error
-                    {
-                        DataId = result.Id,
-                        TypeError = item.ErrorCode
-                    });
-                }
-
-                foreach (var item in data2.Errors)
-                {
-                    errors.Add(new Error
-                    {
-                        DataId = result.Id,
-                        TypeError = item.ErrorCode
-                    });
-                }
-
-                foreach (var item in data1.Images)
-                {
-                    images.Add(new Image
-                    {
-                        DataId = result.Id,
-                        PathUrl = item.PathImage
-                    });
-                }
-
-                foreach (var item in data2.Images)
-                {
-                    images.Add(new Image
-                    {
-                        DataId = result.Id,
-                        PathUrl = item.PathImage
-                    });
-                }
+                Logs.Log($"Error can not save to database, error: {ex.Message}");
             }
-
-            await context.Error.AddRangeAsync(errors);
-            await context.Image.AddRangeAsync(images);
-
-            await context.SaveChangesAsync();
         }
 
         public async Task SendDataToPLC(int data)
@@ -239,21 +247,154 @@ namespace Bend_PSA.Services
 
         public async Task CheckStatusVisionBusy()
         {
-            while (true)
+            try
             {
-                if (Global.CONNECT_1 == Constants.ACTIVE && Global.CONNECT_2 == Constants.ACTIVE &&
-                    Global.CAM_1 == Constants.ACTIVE && Global.CAM_2 == Constants.ACTIVE &&
-                    Global.DEEP_LEARNING_1 == Constants.ACTIVE && Global.DEEP_LEARNING_2 == Constants.ACTIVE)
+                while (true)
                 {
-                    await _homeHub.Clients.All.SendAsync("VisionBusy", true);
-                    ControlPLC.Instance.VisionBusy(false);
+                    if (Global.CONNECT_1 == Constants.ACTIVE && Global.CONNECT_2 == Constants.ACTIVE
+                        && Global.CAM_1 == Constants.ACTIVE && Global.CAM_2 == Constants.ACTIVE
+                        && Global.DEEP_LEARNING_1 == Constants.ACTIVE && Global.DEEP_LEARNING_2 == Constants.ACTIVE
+                        && !string.IsNullOrWhiteSpace(Global.CurrentModel))
+                    {
+                        await _homeHub.Clients.All.SendAsync("VisionBusy", true);
+                        ControlPLC.Instance.VisionBusy(false);
+                    }
+                    else
+                    {
+                        await _homeHub.Clients.All.SendAsync("VisionBusy", false);
+                        ControlPLC.Instance.VisionBusy(true);
+                    }
+                    await Task.Delay(200);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logs.Log($"Error can not save to database, error: {ex.Message}");
+            }
+        }
+
+        public async Task<string> ExportData(string fromDate, string toDate)
+        {
+            try
+            {
+                var sql = $@"
+                    WITH DataResults AS (
+                        SELECT 
+                            CAST(d.time AS DATE) AS date_select, 
+                            d.model,
+                            CASE 
+                                WHEN d.model = 'Stiffener_954_PSA_Side' OR d.model = 'Stiffener_953_PSA_Side' OR d.model = 'Stiffener_963_964_PSA_Side'
+                                THEN 'PSA'  
+                                ELSE 'SUS' 
+                            END AS type_model, 
+                            SUM(CASE WHEN d.result_area = 1 AND d.result_line = 1 THEN 1 ELSE 0 END) AS ok,
+                            SUM(CASE WHEN d.result_area = 2 OR d.result_line = 2 THEN 1 ELSE 0 END) AS ng
+                        FROM data d
+                        WHERE CAST(d.time AS DATE) >= '{fromDate}' 
+                          AND CAST(d.time AS DATE) <= '{toDate}' 
+                          AND d.model <> ''
+                        GROUP BY d.model, CAST(d.time AS DATE)
+                    ),
+                    ErrorCounts AS (
+                        SELECT 
+                            CAST(d.time AS DATE) AS date_select,
+                            d.model,
+                            SUM(CASE WHEN e.type_error = 1 THEN 1 ELSE 0 END) AS error_particle,
+                            SUM(CASE WHEN e.type_error = 2 THEN 1 ELSE 0 END) AS error_ng_tape_position,
+                            SUM(CASE WHEN e.type_error = 3 THEN 1 ELSE 0 END) AS error_deform,
+                            SUM(CASE WHEN e.type_error = 4 THEN 1 ELSE 0 END) AS error_scratch,
+                            SUM(CASE WHEN e.type_error = 5 THEN 1 ELSE 0 END) AS error_dirty
+                        FROM data d
+                        LEFT JOIN errors e ON d.id = e.data_id
+                        WHERE CAST(d.time AS DATE) >= '{fromDate}' 
+                          AND CAST(d.time AS DATE) <= '{toDate}'
+                          AND d.model <> '' 
+                        GROUP BY d.model, CAST(d.time AS DATE)
+                    )
+                    SELECT 
+                        d.date_select,
+                        d.model,
+                        d.type_model,
+                        d.ok,
+                        d.ng,
+                        COALESCE(e.error_particle, 0) AS error_particle,
+                        COALESCE(e.error_ng_tape_position, 0) AS error_ng_tape_position,
+                        COALESCE(e.error_deform, 0) AS error_deform,
+                        COALESCE(e.error_scratch, 0) AS error_scratch,
+                        COALESCE(e.error_dirty, 0) AS error_dirty
+                    FROM DataResults d
+                    LEFT JOIN ErrorCounts e ON d.model = e.model AND d.date_select = e.date_select
+                    ORDER BY d.date_select asc;";
+
+                var results = new List<ExportDataResponse>();
+
+                using (var connection = _context.Database.GetDbConnection())
+                {
+                    await connection.OpenAsync();
+
+                    using var command = connection.CreateCommand();
+                    command.CommandText = sql;
+
+                    using var reader = await command.ExecuteReaderAsync();
+                    while (await reader.ReadAsync())
+                    {
+                        var dateSelect = reader.GetDateTime(reader.GetOrdinal("date_select")).ToString("dd/MM/yyyy");
+
+                        var result = new ExportDataResponse
+                        {
+                            DateSelect = dateSelect,
+                            Model = reader.GetString(reader.GetOrdinal("model")),
+                            TypeModel = reader.GetString(reader.GetOrdinal("type_model")),
+                            Ok = reader.GetInt32(reader.GetOrdinal("ok")),
+                            Ng = reader.GetInt32(reader.GetOrdinal("ng")),
+                            ErrorParticle = reader.GetInt32(reader.GetOrdinal("error_particle")),
+                            ErrorNgTapePosition = reader.GetInt32(reader.GetOrdinal("error_ng_tape_position")),
+                            ErrorDeform = reader.GetInt32(reader.GetOrdinal("error_deform")),
+                            ErrorScratch = reader.GetInt32(reader.GetOrdinal("error_scratch")),
+                            ErrorDirty = reader.GetInt32(reader.GetOrdinal("error_dirty"))
+                        };
+
+                        results.Add(result);
+                    }
+                }
+
+                if (results.Count > 0)
+                {
+                    if (!Directory.Exists(Global.PATH_EXPORT_EXCEL))
+                    {
+                        Directory.CreateDirectory(Global.PATH_EXPORT_EXCEL);
+                    }
+
+                    string fileName = string.Empty;
+
+                    if (fromDate == toDate)
+                    {
+                        fileName = $"{fromDate}.xlsx";
+                    }
+                    else
+                    {
+                        fileName = $"{fromDate}_{toDate}.xlsx";
+                    }
+
+                    string filePath = Path.Combine(Global.PATH_EXPORT_EXCEL, fileName);
+                    filePath = Files.GetUniqueFilePath(filePath);
+
+                    foreach (var item in results)
+                    {
+                        Files.ExportExcel(item, filePath);
+                    }
+
+                    return "success";
                 }
                 else
                 {
-                    await _homeHub.Clients.All.SendAsync("VisionBusy", false);
-                    ControlPLC.Instance.VisionBusy(true);
+                    return "Not data";
                 }
-                await Task.Delay(200);
+            }
+            catch (Exception ex)
+            {
+                Logs.Log($"Error can not export data, error: {ex.Message}");
+                return "Not data";
             }
         }
     }

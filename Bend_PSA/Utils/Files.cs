@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml;
+﻿using Bend_PSA.Models.Responses;
+using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System.Drawing;
 
@@ -115,7 +116,7 @@ namespace Bend_PSA.Utils
             }
         }
 
-        public static void ExportExcel()
+        public static void ExportExcel(ExportDataResponse item, string file)
         {
             string dateString = DateTime.Now.ToString("yyyy-MM-dd");
 

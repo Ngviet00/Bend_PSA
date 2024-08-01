@@ -1,9 +1,9 @@
 ﻿export const STATUS_PLC = Object.freeze({
-    'EMG': 0,
+    'DISCONNECTED': 0,
     'START': 1,
     'STOP': 2,
     'ALARM': 3,
-    'DISCONNECTED': 4
+    'EMG': 4
 });
 
 export const STATUS_RESULT = Object.freeze({

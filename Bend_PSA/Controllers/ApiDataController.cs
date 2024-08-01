@@ -163,6 +163,57 @@ namespace Bend_PSA.Controllers.Api
             }
         }
 
+        [HttpPost("post-model")]
+        public async Task<IActionResult> PostModel(int clientId, string strModels)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(strModels))
+                {
+                    Global.StringModels += "," + strModels;
+                }
+
+                Global.StringModels = Global.StringModels.Trim(',');
+
+                Global.CurrentModel = string.Empty;
+
+                if (clientId == (int)EClient.CLIENT_1)
+                {
+                    Global.Client1PostModel = Constants.INACTIVE;
+                }
+
+                if (clientId == (int)EClient.CLIENT_2)
+                {
+                    Global.Client2PostModel = Constants.INACTIVE;
+                }
+
+                Global.ListModels = Global.GetListModelsAppearTwoTime(Global.StringModels);
+
+                if (Global.ListModels.Count > 0)
+                {
+                    Files.WriteFileToTxt(Files.GetFilePathSetting(), new Dictionary<string, string>
+                    {
+                        { "ListModels", string.Join(", ", Global.ListModels.Select(item => $"{item}")) },
+                    });
+                    await _homeHub.Clients.All.SendAsync("RefreshListModels", Global.ListModels);
+                }
+
+                return Ok(new
+                {
+                    status = 200,
+                    message = "success",
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    status = 500,
+                    message = ex.Message,
+                });
+            }
+        }
+
         private static async Task TimerElapsed(IHubContext<HomeHub> homeHub, int clientId, string nameActionHomeHub)
         {
             await homeHub.Clients.All.SendAsync(nameActionHomeHub, clientId, false);

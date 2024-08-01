@@ -451,6 +451,54 @@ $(function () {
         }
     });
 
+    $('.btn-reload-model').click(function () {
+        $('#select-model').html(`<option value="" selected disabled>Choose Model</option>`);
+
+        connection.invoke("ReloadModels").then((res) => {
+            appendTimeLog(getCurrentDateTime(), "Client", `Reload list models`);
+        })
+        .catch((err) => {
+            console.error("Error calling API:", err.toString());
+        });
+    })
+
+    connection.on("RefreshListModels", (results) => {
+        let options = '<option value="" selected disabled>Choose Model</option>';
+        let optionsFormSearch = '<option value="" selected>Choose Model</option>';
+
+        results.forEach(item => {
+            options += `<option value="${item}">${item}</option>`;
+            optionsFormSearch += `<option value="${item}">${item}</option>`;
+        });
+
+        $('#select-model').html(options);
+        $('#form-search-model').html(optionsFormSearch);
+
+        alert('Please choose model!');
+    })
+
+    $('.form-button-export').click(function () {
+        $('.action-form-export .form-button-export').prop('disabled', true).html('Loading...');
+        let fromDate = $('.action-form-export #start-date').val()
+        let toDate = $('.action-form-export #end-date').val()
+
+        connection.invoke("ExportData", fromDate, toDate)
+            .then(function (res) {
+                if (res == 'success') {
+                    alert('Export data successfully!');
+                }
+                else {
+                    alert('Not data to export!');
+                }
+            })
+            .catch(function (err) {
+                console.error("Error calling API:", err.toString());
+            })
+            .finally(function () {
+                $('.form-search-btn-export-data').prop('disabled', false).html('Export Data');
+            });
+    });
+
     //====================================================== Form search and load more ======================================================
     /*var pageListResult = 1;
     var totalListResult = 0;

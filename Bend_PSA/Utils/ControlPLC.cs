@@ -87,8 +87,7 @@ namespace Bend_PSA.Utils
 
         public int ReadDeviceBlock(string address)
         {
-            int valueReaded = 0;
-            _plc.ReadDeviceBlock(REGISTER_PLC_READ_STATUS, 1, out valueReaded);
+            _plc.ReadDeviceBlock(address, 1, out int valueReaded);
 
             return valueReaded;
         }

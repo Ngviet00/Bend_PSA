@@ -35,10 +35,17 @@ namespace Bend_PSA.Utils
         public static System.Timers.Timer? timerClientDeepLearning1 = null;
         public static System.Timers.Timer? timerClientDeepLearning2 = null;
 
+        public static string StringModels = string.Empty;
+
         public static string CurrentModel = string.Empty;
         public static List<string> ListModels = [];
 
+        public static short Client1PostModel = Constants.INACTIVE;
+        public static short Client2PostModel = Constants.INACTIVE;
+
         public static string PathDownloadImage = @"D:\publish_image";
+
+        public static string PATH_EXPORT_EXCEL = @"D:\Export_Excel";
 
         public static string TimeLine = DateTime.Now.ToString("yyMMddHHmmss");
 
@@ -51,6 +58,11 @@ namespace Bend_PSA.Utils
             };
 
             return number.ToString("#,##0", customNumberFormat);
+        }
+
+        public static List<string> GetListModelsAppearTwoTime(string models)
+        {
+            return models.Split(',').GroupBy(x => x).Where(g => g.Count() == 2).Select(g => g.Key).ToList();
         }
     }
 }
