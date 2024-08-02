@@ -46,7 +46,7 @@ namespace Bend_PSA.Utils
 
         public void ConnectPLC()
         {
-            if (_plc.Open() == 0 || _plc.Open() == 25202689)
+            if (_plc.Open() == 0)
             {
                 Thread thReadStatusPLC = new Thread(async () => await ReadStatusPLC());
                 thReadStatusPLC.Name = "THREAD_READ_STATUS_PLC";
